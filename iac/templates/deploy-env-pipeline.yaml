@@ -1,0 +1,40 @@
+parameters:
+- name: location
+  type: string
+- name: environment
+  type: string
+- name: dependsOn
+  type: object
+  default: [] 
+
+stages:
+- stage: BuildAndDeploy-${{ parameters.environment }}
+  displayName: 'Build and Deploy'
+  dependsOn: ${{ parameters.dependsOn}}
+
+  jobs:
+  - template: builds/build-app.yaml
+
+  - template: builds/build-basic-infra.yaml
+    parameters:
+      environment: ${{ parameters.environment }}
+      location: ${{ parameters.location }}
+      dependsOn: ['BuildAndTestApp']
+
+  - template: builds/build-images.yaml 
+    parameters:
+      environment: ${{ parameters.environment }}
+      location: ${{ parameters.location }}
+      dependsOn: ['CreateACR']
+
+  - template: builds/build-aca.yaml
+    parameters:
+      environment: ${{ parameters.environment }}
+      location: ${{ parameters.location }}
+      dependsOn: ['BuildAndPushImages']
+
+  - template: builds/test-deployment.yaml
+    parameters:
+      environment: ${{ parameters.environment }}
+      location: ${{ parameters.location }}
+      dependsOn: ['CreateACA']

@@ -1,0 +1,29 @@
+parameters:
+- name: environment
+  type: string
+- name: location
+  type: string
+- name: dependsOn
+  type: object
+  default: []
+
+
+jobs:
+- job: CreateACR
+  displayName: 'Create Azure Container Registry'
+  dependsOn: ${{ parameters.dependsOn}}
+  variables:
+  - template: ../../vars/vars-global.yaml
+  - template: ../../vars/vars-${{ parameters.environment }}.yaml
+    parameters:
+      location: ${{ parameters.location }}
+  steps:
+
+  - task: AzureCLI@2
+    displayName: Run ACR deployment script
+    inputs:
+      azureSubscription: ${{ variables.serviceConnection }}
+      scriptType: 'bash'
+      scriptLocation: 'scriptPath'
+      scriptPath: '$(Build.SourcesDirectory)/iac/scripts/deploy-acr.sh'
+      arguments: ${{ parameters.environment }} ${{ parameters.location }} $(Build.BuildId)

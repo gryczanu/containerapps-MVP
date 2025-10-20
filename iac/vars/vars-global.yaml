@@ -1,0 +1,4 @@
+variables:
+  productVersion: 1.0.0
+  apiVersion: 1.0
+  imageVersion: 1.1.0

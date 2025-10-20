@@ -1,0 +1,42 @@
+jobs:
+- job: BuildAndTestApp
+  displayName: 'Build App and Test Job'
+  pool:
+    vmImage: 'ubuntu-latest'
+  
+  steps:
+  - checkout: self
+    fetchDepth: 0
+  
+  - task: UseDotNet@2
+    displayName: 'Setup .NET SDK'
+    inputs:
+      packageType: 'sdk'
+      version: '6.0.x'
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'Restore packages'
+    inputs:
+      command: 'restore'
+      projects: 'src/albumapi_csharp.csproj'
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'Build application'
+    inputs:
+      command: 'build'
+      projects: 'src/albumapi_csharp.csproj'
+      arguments: '--configuration Release --no-restore'
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'Run unit tests'
+    inputs:
+      command: 'test'
+      projects: 'src/albumapi_csharp.csproj'
+      arguments: '--configuration Release --no-build --collect:"XPlat Code Coverage"'
+  
+  - task: PublishCodeCoverageResults@2
+    displayName: 'Publish code coverage'
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+    condition: succeededOrFailed()

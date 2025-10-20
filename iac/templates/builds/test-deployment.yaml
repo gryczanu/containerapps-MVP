@@ -1,0 +1,28 @@
+parameters:
+- name: environment
+  type: string
+- name: location
+  type: string
+- name: dependsOn
+  type: object
+  default: []
+
+jobs:
+- job: TestContainerApps
+  dependsOn: ${{ parameters.dependsOn }}
+  displayName: 'Check Container Apps'
+  variables:
+  - template: ../../vars/vars-global.yaml
+  - template: ../../vars/vars-${{ parameters.environment }}.yaml
+    parameters:
+      location: ${{ parameters.location }}  
+      
+  steps:
+  - task: AzureCLI@2
+    displayName: 'Test Container Deployment'
+    inputs:
+      azureSubscription: ${{ variables.serviceConnection }}
+      scriptType: 'bash'
+      scriptLocation: 'scriptPath'
+      scriptPath: '$(Build.SourcesDirectory)/iac/scripts/test-aca.sh'
+      arguments: '$(apiName) $(resourceGroup) $(imageVersion)'

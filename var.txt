@@ -1,0 +1,4 @@
+export RESOURCE_GROUP="rg-album-containerapps-DEV"
+export LOCATION="eastus"
+export ENVIRONMENT="env-album-containerapps-DEV"
+export API_NAME="album-api-DEV"

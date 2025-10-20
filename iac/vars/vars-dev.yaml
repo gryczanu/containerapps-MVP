@@ -1,0 +1,15 @@
+
+variables:
+- template: locations/location-${{ parameters.location }}.yaml
+- name: subscriptionId
+  value: '46121708-342d-432a-81c0-0a195d73730b'
+- name: resourceGroup
+  value: 'rg-album-containerapps-DEV'
+- name: serviceConnection
+  value: 'containerapps-DEV'
+- name: acrName
+  value: 'acralbumapidev'
+- name: dockerRegistryUrl
+  value: 'acralbumapidev.azurecr.io'
+- name: apiName
+  value: 'album-api-dev'

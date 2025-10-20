@@ -1,0 +1,15 @@
+
+variables:
+- template: locations/location-${{ parameters.location }}.yaml
+- name: subscriptionId
+  value: 'place-holder'
+- name: resourceGroup
+  value: 'place-holder'
+- name: serviceConnection
+  value: 'place-holder'
+- name: acrName
+  value: 'place-holder'
+- name: dockerRegistryUrl
+  value: 'place-holder'
+- name: apiName
+  value: 'place-holder'
