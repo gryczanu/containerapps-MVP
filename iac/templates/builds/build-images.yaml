@@ -1,0 +1,38 @@
+parameters:
+- name: environment
+  type: string
+- name: location
+  type: string
+- name: dependsOn
+  type: object
+  default: []
+
+jobs:
+- job: BuildAndPushImages
+  dependsOn: ${{ parameters.dependsOn }}
+  displayName: 'Build and Push to ACR'
+  variables:
+  - template: ../../vars/vars-global.yaml
+  - template: ../../vars/vars-${{ parameters.environment }}.yaml
+    parameters:
+      location: ${{ parameters.location }}
+  steps:
+  
+  - task: AzureCLI@2
+    displayName: 'Build and push to ACR'
+    inputs:
+      azureSubscription: ${{ variables.serviceConnection }}
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # Login to ACR
+        echo "Logging into Azure Container Registry..."
+        az acr login --name $(acrName)
+        
+        # Build Docker image locally
+        echo "Building Docker image locally..."
+        docker build -t $(acrName).azurecr.io/$(apiName):$(imageVersion)-$(Build.BuildId) -f ./src/Dockerfile ./src
+        
+        # Push image to ACR
+        echo "Pushing image to ACR..."
+        docker push $(acrName).azurecr.io/$(apiName):$(imageVersion)-$(Build.BuildId)

@@ -1,0 +1,27 @@
+parameters:
+- name: environment
+  type: string
+- name: location
+  type: string
+- name: dependsOn
+  type: object
+  default: []
+
+jobs:
+- job: CreateACA
+  dependsOn: ${{ parameters.dependsOn }}
+  displayName: 'Create ACA'
+  variables:
+  - template: ../../vars/vars-global.yaml
+  - template: ../../vars/vars-${{ parameters.environment }}.yaml
+    parameters:
+      location: ${{ parameters.location }}
+  steps:
+  - task: AzureCLI@2
+    displayName: Run ACA deployment script
+    inputs:
+      azureSubscription: ${{ variables.serviceConnection }}
+      scriptType: 'bash'
+      scriptLocation: 'scriptPath'
+      scriptPath: '$(Build.SourcesDirectory)/iac/scripts/deploy-aca.sh'
+      arguments:  ${{ parameters.environment }} ${{ parameters.location }} $(Build.BuildId) $(Build.SourceVersion)

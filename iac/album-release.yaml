@@ -1,0 +1,53 @@
+# Azure DevOps Pipeline for Container Apps Deployment
+trigger:
+  branches:
+    include:
+    - main
+    - feature/*
+  # paths:
+  #   include:
+  #   - src/*
+  #   - iac/*
+
+pool:
+  vmImage: 'ubuntu-22.04'
+  
+parameters:
+- name: location
+  type: string
+  default: eus
+
+variables:
+- template: vars/vars-global.yaml
+
+name: Albums--${{ parameters.location }}-${{ variables.productVersion }}-$(Build.BuildId)
+
+stages:
+
+# DEV DEPLOYMENT
+
+- template: templates/deploy-env-pipeline.yaml
+  parameters:
+    environment: dev
+    location: ${{ parameters.location }}
+    approvalEnvironment: 'Deployment Approver'
+    dependsOn: []
+
+# # TEST DEPLOYMENT
+
+# - template: templates/deploy-env-pipeline.yaml
+#   parameters:
+#     environment: tst
+#     location: ${{ parameters.location }}
+#     approvalEnvironment: 'Deployment Approver'
+#     dependsOn: ['BuildAndDeploy_dev']
+
+
+# # PRD DEPLOYMENT
+
+# - template: templates/deploy-env-pipeline.yaml
+#   parameters:
+#     environment: prd
+#     location: ${{ parameters.location }}
+#     approvalEnvironment: 'Deployment Approver'
+#     dependsOn: ['BuildAndDeploy_tst']
