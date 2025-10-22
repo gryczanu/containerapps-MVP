@@ -13,7 +13,7 @@ buildDir=iac
 output_file="wiki.md"
 > "$output_file"
 
-function gen_cil {
+function gen_wiki {
     echo "Getting revision information..."
     revisions=$(az containerapp revision list --all --name $ENV_variables_apiName --resource-group $ENV_variables_resourceGroup --query "[].{name:name, trafficWeight:properties.trafficWeight, createdTime:properties.createdTime, runningState:properties.runningState}" -o json)
 }
