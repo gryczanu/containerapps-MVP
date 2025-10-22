@@ -14,21 +14,21 @@ output_file="wiki.md"
 > "$output_file"
 
 function gen_wiki {
-    echo "Getting revision information..."
-    revisions=$(az containerapp revision list --all --name $ENV_variables_apiName --resource-group $ENV_variables_resourceGroup --query "[].{name:name, trafficWeight:properties.trafficWeight, createdTime:properties.createdTime, runningState:properties.runningState}" -o json)
+    echo "Getting latest revision information..."
+    revisions=$(az containerapp revision list --name $ENV_variables_apiName --resource-group $ENV_variables_resourceGroup --query "[0].{name:name, trafficWeight:properties.trafficWeight, createdTime:properties.createdTime, runningState:properties.runningState}" -o json)
     
     # Create wiki header
     cat > "$output_file" << EOF
-# Container App Revisions - $ENV_variables_apiName
+# Container App Latest Revision - $ENV_variables_apiName
 
-## Revision Details
+## Latest Revision Details
 
 | Name | State | Creation | Traffic |
 |------|-------|----------|---------|
 EOF
 
-    # Parse JSON and create table rows
-    echo "$revisions" | jq -r '.[] | "| \(.name) | \(.runningState) | \(.createdTime) | \(.trafficWeight // 0)% |"' >> "$output_file"
+    # Parse JSON and create table row for latest revision
+    echo "$revisions" | jq -r '"| \(.name) | \(.runningState) | \(.createdTime) | \(.trafficWeight // 0)% |"' >> "$output_file"
     
     echo "" >> "$output_file"
     echo "*Generated: $(date)*" >> "$output_file"

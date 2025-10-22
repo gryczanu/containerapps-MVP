@@ -20,7 +20,7 @@ parameters:
 variables:
 - template: vars/vars-global.yaml
 
-name: Album--${{ parameters.location }}-${{ variables.productVersion }}--$(Build.BuildId)
+name: Album--${{ parameters.location }}-${{ variables.productVersion }}-$(Build.BuildId)
 
 stages:
 

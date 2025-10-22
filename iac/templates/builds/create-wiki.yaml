@@ -23,14 +23,14 @@ jobs:
       workspaceRepo: true
       persistCredentials: true
     - task: AzureCLI@2
-      displayName: "Build combined CIL wiki page for all models"
+      displayName: "Build combined WIKI wiki page for all models"
       inputs:
         azureSubscription: ${{variables.serviceConnection}}
         scriptType: 'bash'
         scriptPath: 'iac/scripts/create-wiki-page.sh'
         arguments: '${{ parameters.environment }} ${{ parameters.location }}'
     - task: Bash@3
-      displayName: "Publish combined CIL wiki page"
+      displayName: "Publish combined WIKI wiki page"
       inputs:
         targetType: 'filePath'
         filePath: 'iac/scripts/publish-wiki.sh'
