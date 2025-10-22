@@ -7,7 +7,7 @@ releaseName=$3
 
 # variables
 pageContent=$(cat wiki.md)
-date=$(date +%Y%m%d-%H%M%S)
+date=$(TZ='Europe/Berlin' date +%Y.%m.%d-%H:%M:%S)
 
 releaseDir="$organizationUrl$project/_apis/wiki/wikis/albums/pages?path=Releases/$releaseName"
 pageUrlPostfix="&versionDescriptor.version=main&api-version=7.1"
