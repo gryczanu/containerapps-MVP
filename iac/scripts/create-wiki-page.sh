@@ -3,8 +3,8 @@
 # params
 env=$1
 location=$2
-appName=$3
-resourceGroup=$4
+# appName=$3
+# resourceGroup=$4
 
 buildDir=iac
 
