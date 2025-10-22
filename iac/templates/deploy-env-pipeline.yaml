@@ -3,6 +3,8 @@ parameters:
   type: string
 - name: environment
   type: string
+- name: approvalEnvironment
+  type: string
 - name: dependsOn
   type: object
   default: [] 
@@ -13,7 +15,20 @@ stages:
   dependsOn: ${{ parameters.dependsOn}}
 
   jobs:
+
+  - deployment: ApproveDeployJobTo_${{ parameters.environment }}
+    displayName: Approve deploy to ${{ parameters.environment }}
+    environment: ${{ parameters.approvalEnvironment }}
+    strategy: 
+      runOnce:
+        deploy:            
+          steps:
+          - bash: echo 'Deployment approved, proceeding with deployment jobs...'
+            displayName: 'Approval Step'
+
   - template: builds/build-app.yaml
+    parameters:
+      dependsOn: ['ApproveDeployJobTo_${{ parameters.environment }}']
 
   - template: builds/build-basic-infra.yaml
     parameters:

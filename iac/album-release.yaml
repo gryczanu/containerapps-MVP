@@ -30,6 +30,7 @@ stages:
   parameters:
     environment: dev
     location: ${{ parameters.location }}
+    approvalEnvironment: 'Deployment Approver'
     dependsOn: []
 
 # # TEST DEPLOYMENT
@@ -38,7 +39,9 @@ stages:
 #   parameters:
 #     environment: tst
 #     location: ${{ parameters.location }}
+#     approvalEnvironment: 'Deployment Approver'
 #     dependsOn: ['BuildAndDeploy-dev']
+
 
 # # PRD DEPLOYMENT
 
@@ -46,4 +49,5 @@ stages:
 #   parameters:
 #     environment: prd
 #     location: ${{ parameters.location }}
+#     approvalEnvironment: 'Deployment Approver'
 #     dependsOn: ['BuildAndDeploy-tst']

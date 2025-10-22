@@ -1,3 +1,8 @@
+parameters:
+- name: dependsOn
+  type: object
+  default: []
+
 jobs:
 - job: BuildAndTestApp
   displayName: 'Build App and Test Job'
