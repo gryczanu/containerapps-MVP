@@ -27,13 +27,13 @@ jobs:
       inputs:
         azureSubscription: ${{variables.serviceConnection}}
         scriptType: 'bash'
-        scriptPath: '$(Build.SourcesDirectory)/iac/scripts/create-wiki-page.sh'
+        scriptPath: 'iac/scripts/create-wiki-page.sh'
         arguments: '${{ parameters.environment }} ${{ parameters.location }}'
     - task: Bash@3
       displayName: "Publish combined CIL wiki page"
       inputs:
         targetType: 'filePath'
-        filePath: '$(Build.SourcesDirectory)/iac/scripts/publish-wiki.sh'
+        filePath: 'iac/scripts/publish-wiki.sh'
         arguments: '$(System.TeamProject) $(System.TeamFoundationCollectionUri) ${{ variables.productVersion }}'
       env:
         SYSTEM_ACCESSTOKEN: $(System.AccessToken)
