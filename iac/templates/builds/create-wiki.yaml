@@ -1,0 +1,39 @@
+parameters:
+- name: environment
+  type: string
+- name: location
+  type: string
+- name: dependsOn
+  type: object
+  default: []
+
+jobs:
+- job: CreateWikiJob_${{ parameters.environment }}
+  displayName: Create Documentation for ${{ parameters.environment }}
+  dependsOn: ${{ parameters.dependsOn }}
+  variables:
+  - template: ../../vars/vars-global.yaml
+  - template: ../../vars/vars-${{ parameters.environment }}.yaml
+    parameters:
+      location: ${{ parameters.location }} 
+  steps:
+    - checkout: git://containerapps-MVP/albums_wiki
+      clean: true
+    - checkout: self
+      workspaceRepo: true
+      persistCredentials: true
+    - task: AzureCLI@2
+      displayName: "Build combined CIL wiki page for all models"
+      inputs:
+        azureSubscription: ${{variables.serviceConnection}}
+        scriptType: 'bash'
+        scriptPath: '$(Build.SourcesDirectory)/iac/scripts/create-wiki-page.sh'
+        arguments: '${{ parameters.environment }} ${{ parameters.location }}'
+    - task: Bash@3
+      displayName: "Publish combined CIL wiki page"
+      inputs:
+        targetType: 'filePath'
+        filePath: '$(Build.SourcesDirectory)/iac/scripts/publish-wiki.sh'
+        arguments: '$(System.TeamProject) $(System.TeamFoundationCollectionUri) ${{ variables.productVersion }}'
+      env:
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
