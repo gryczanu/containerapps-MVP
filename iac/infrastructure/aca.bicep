@@ -33,17 +33,17 @@ func getContainerConfiguration(cfg types.modelConfiguration, env types.environme
         value: env.env
       }            
     ]
-    // probes: [
-    //   {
-    //     type: 'liveness'
-    //     httpGet: {
-    //       path: '/api/health'
-    //       port: 8080
-    //     }
-    //     initialDelaySeconds: 20
-    //     periodSeconds: 10
-    //   }
-    // ]          
+    probes: [
+      {
+        type: 'liveness'
+        httpGet: {
+          path: '/api/health'
+          port: 8080
+        }
+        initialDelaySeconds: 20
+        periodSeconds: 10
+      }
+    ]          
   }
 ]
 
