@@ -10,7 +10,7 @@ parameters:
   default: [] 
 
 stages:
-- stage: BuildAndDeploy-${{ parameters.environment }}
+- stage: BuildAndDeploy_${{ parameters.environment }}
   displayName: 'Build and Deploy'
   dependsOn: ${{ parameters.dependsOn}}
 
