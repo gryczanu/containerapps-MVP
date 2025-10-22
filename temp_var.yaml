@@ -1,7 +1,0 @@
-
-variables:
-  subscriptionId: '46121708-342d-432a-81c0-0a195d73730b'
-  resourceGroup: 'rg-album-containerapps-DEV'
-  serviceConnection: 'containerapps-DEV'
-  acrName: 'acralbumapidev'
-  apiName: 'album-api-dev'
