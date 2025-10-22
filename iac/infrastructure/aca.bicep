@@ -16,8 +16,8 @@ func getContainerConfiguration(cfg types.modelConfiguration, env types.environme
     image: '${env.acrEndpoint}/${cfg.name}:${cfg.imageVersion}-${cfg.buildId}'
     name: cfg.name
     resources: {
-        cpu: json('0.5')
-        memory: '1Gi'
+        cpu: json('1.0')
+        memory: '2Gi'
     }
     env: [
       {
@@ -33,17 +33,17 @@ func getContainerConfiguration(cfg types.modelConfiguration, env types.environme
         value: env.env
       }            
     ]
-    probes: [
-      {
-        type: 'liveness'
-        httpGet: {
-          path: '/api/health'
-          port: 8080
-        }
-        initialDelaySeconds: 20
-        periodSeconds: 10
-      }
-    ]          
+    // probes: [
+    //   {
+    //     type: 'liveness'
+    //     httpGet: {
+    //       path: '/api/health'
+    //       port: 8080
+    //     }
+    //     initialDelaySeconds: 20
+    //     periodSeconds: 10
+    //   }
+    // ]          
   }
 ]
 

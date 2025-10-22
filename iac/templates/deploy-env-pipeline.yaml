@@ -16,46 +16,46 @@ stages:
 
   jobs:
 
-  # - deployment: ApproveDeployJobTo_${{ parameters.environment }}
-  #   displayName: Approve deploy to ${{ parameters.environment }}
-  #   environment: ${{ parameters.approvalEnvironment }}
-  #   strategy: 
-  #     runOnce:
-  #       deploy:            
-  #         steps:
-  #         - bash: echo 'Deployment approved, proceeding with deployment jobs...'
-  #           displayName: 'Approval Step'
+  - deployment: ApproveDeployJobTo_${{ parameters.environment }}
+    displayName: Approve deploy to ${{ parameters.environment }}
+    environment: ${{ parameters.approvalEnvironment }}
+    strategy: 
+      runOnce:
+        deploy:            
+          steps:
+          - bash: echo 'Deployment approved, proceeding with deployment jobs...'
+            displayName: 'Approval Step'
 
-  # - template: builds/build-app.yaml
-  #   parameters:
-  #     dependsOn: ['ApproveDeployJobTo_${{ parameters.environment }}']
+  - template: builds/build-app.yaml
+    parameters:
+      dependsOn: ['ApproveDeployJobTo_${{ parameters.environment }}']
 
-  # - template: builds/build-basic-infra.yaml
-  #   parameters:
-  #     environment: ${{ parameters.environment }}
-  #     location: ${{ parameters.location }}
-  #     dependsOn: ['BuildAndTestApp']
+  - template: builds/build-basic-infra.yaml
+    parameters:
+      environment: ${{ parameters.environment }}
+      location: ${{ parameters.location }}
+      dependsOn: ['BuildAndTestApp']
 
-  # - template: builds/build-images.yaml 
-  #   parameters:
-  #     environment: ${{ parameters.environment }}
-  #     location: ${{ parameters.location }}
-  #     dependsOn: ['CreateACR']
+  - template: builds/build-images.yaml 
+    parameters:
+      environment: ${{ parameters.environment }}
+      location: ${{ parameters.location }}
+      dependsOn: ['CreateACR']
 
-  # - template: builds/build-aca.yaml
-  #   parameters:
-  #     environment: ${{ parameters.environment }}
-  #     location: ${{ parameters.location }}
-  #     dependsOn: ['BuildAndPushImages']
+  - template: builds/build-aca.yaml
+    parameters:
+      environment: ${{ parameters.environment }}
+      location: ${{ parameters.location }}
+      dependsOn: ['BuildAndPushImages']
 
-  # - template: builds/test-deployment.yaml
-  #   parameters:
-  #     environment: ${{ parameters.environment }}
-  #     location: ${{ parameters.location }}
-  #     dependsOn: ['CreateACA']
+  - template: builds/test-deployment.yaml
+    parameters:
+      environment: ${{ parameters.environment }}
+      location: ${{ parameters.location }}
+      dependsOn: ['CreateACA']
 
   - template: builds/create-wiki.yaml
     parameters:
       environment: ${{ parameters.environment }}
       location: ${{ parameters.location }}
-      dependsOn: []      
+      dependsOn: ['TestContainerApps']
